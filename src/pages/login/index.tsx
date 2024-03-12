@@ -1,14 +1,20 @@
 import React from 'react'
+import { useRouter } from 'next/navigation'
+
+import { authService } from '../../services/auth.service'
 import styles from './styles.module.scss'
 
 export default function LoginPage() {
 
+    const router = useRouter()
+
     let username: string = ''
     let password: string = ''
 
-    function login() {
-        if (username === 'uedsonreis' && password === '123456') {
-            alert('Usuário logado com sucesso')
+    async function login() {
+        const isLogged = await authService.login(username, password)
+        if (isLogged) {
+            router.replace('users')
         } else {
             alert('Usuário/senha inválido(a)')
         }
