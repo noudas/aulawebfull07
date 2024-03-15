@@ -105,3 +105,9 @@ a {
     color-scheme: dark;
   }
 }
+
+button {
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px 20px;
+}

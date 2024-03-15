@@ -1,6 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 
+import { userService } from '@/services/user.service'
 import styles from './styles.module.scss'
 
 export default function UserPage() {
@@ -36,7 +37,15 @@ export default function UserPage() {
 
         const user = { name, username, password }
 
-        console.log('Usuário salvo com sucesso: ', user)
+        userService.create(user).then(isSaved => {
+            if (isSaved) {
+                goBack()
+            } else {
+                router.replace('login')
+            }
+        }).catch(error => {
+            alert(error.message)
+        })
     }
 
     return (

@@ -1,8 +1,11 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 
+import UserItem from '@/components/UserItem'
 import { userService } from '@/services/user.service'
 import { User } from '@/model/user'
+
+import styles from './styles.module.scss'
 
 export default function UsersPage() {
 
@@ -31,19 +34,19 @@ export default function UsersPage() {
     }, [])
 
     return (
-        <div>
+        <div className={styles.users}>
             <header>
                 <h2>Usuários</h2>
-                <div>
+                <div className={styles.actions}>
                     <button onClick={createNewUser}>Add</button>
                     <button onClick={logOut}>Sair</button>
                 </div>
-
-                <div>
-                    Temos {users.length} usuários cadastrados
-                </div>
-
             </header>
+            <main>
+                {
+                    users.map(user => <UserItem key={user.id} user={user} />)
+                }
+            </main>
         </div>
     )
 

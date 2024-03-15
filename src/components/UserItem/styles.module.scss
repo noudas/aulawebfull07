@@ -1,0 +1,17 @@
+.item {
+
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid gray;
+
+    .title {
+        font-size: 20px;
+    }
+
+    .subTitle {
+        color: gray;
+    }
+
+}
