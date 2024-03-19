@@ -42,6 +42,20 @@ class UserService {
         }
     }
 
+    public async get(id: number) {
+        const response = await fetch(`${this.urlBase}/${id}`, {
+            method: 'GET',
+            headers: this.getHeaders()
+        })
+
+        const data = await this.getData(response)
+        if (data) {
+            return data as User
+        } else {
+            return null
+        }
+    }
+
     public async create(user: User) {
         const response = await fetch(this.urlBase, {
             method: 'POST',
@@ -53,6 +67,21 @@ class UserService {
         if (data) {
             const saved: User = data
             return (saved && saved.id) ? true : false
+        } else {
+            return null
+        }
+    }
+
+    public async update(id: number, name: string) {
+        const response = await fetch(`${this.urlBase}/${id}`, {
+            method: 'PUT',
+            headers: this.getHeaders(),
+            body: JSON.stringify({ name })
+        })
+
+        const data = await this.getData(response)
+        if (data) {
+            return !!data
         } else {
             return null
         }

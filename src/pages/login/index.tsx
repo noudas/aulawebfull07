@@ -1,6 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 
+import TextInput from '@/components/TextInput'
 import { authService } from '../../services/auth.service'
 import styles from './styles.module.scss'
 
@@ -26,19 +27,20 @@ export default function LoginPage() {
                 <h2>Acesso ao Sistema</h2>
             </header>
             <main>
-                <div className={styles.inputPanel}>
-                    <span>Usuário: </span>
-                    <input type="text" onChange={event => username = event.target.value} />
-                </div>
-
-                <div className={styles.inputPanel}>
-                    <span>Senha: </span>
-                    <input type="password" onChange={event => password = event.target.value} />
-                </div>
+                <TextInput
+                    type='text'
+                    label='Usuário'
+                    change={value => username = value}
+                />
+                <TextInput
+                    type='password'
+                    label='Senha'
+                    change={value => password = value}
+                />
             </main>
 
             <footer>
-                <button onClick={login}>Entrar</button>
+                <button className='confirmButton' onClick={login}>Entrar</button>
             </footer>
         </div>
     )

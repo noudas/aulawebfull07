@@ -14,11 +14,15 @@ export default function UsersPage() {
     const [users, setUsers] = React.useState<User[]>([])
 
     function createNewUser() {
-        router.push('user')
+        router.push(`users/create`)
     }
 
     function logOut() {
         router.replace('login')
+    }
+
+    function edit(id: number) {
+        router.push(`users/${id}`)
     }
 
     React.useEffect(() => {
@@ -44,7 +48,9 @@ export default function UsersPage() {
             </header>
             <main>
                 {
-                    users.map(user => <UserItem key={user.id} user={user} />)
+                    users.map(user => (
+                        <UserItem key={user.id} user={user} edit={edit} />
+                    ))
                 }
             </main>
         </div>

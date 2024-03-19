@@ -111,3 +111,7 @@ button {
   font-size: 18px;
   padding: 5px 20px;
 }
+
+.confirmButton {
+  color: greenyellow;
+}
