@@ -87,6 +87,24 @@ class UserService {
         }
     }
 
+    public async delete(id: number) {
+        const response = await fetch(`${this.urlBase}/${id}`, {
+            method: 'DELETE',
+            headers: this.getHeaders(),
+        })
+
+        if (response.ok) {
+            return Boolean(await response.text())
+        } else {
+            if (response.status === 401 || response.status === 403) return null
+            
+            if (response.status === 400) {
+                throw new Error('Usuário já existe!')
+            } else {
+                throw new Error(response.statusText, { cause: response.status })
+            }
+        }
+    }
 }
 
 export const userService = new UserService()

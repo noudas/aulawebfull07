@@ -1,10 +1,11 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 
-import UserItem from '@/components/UserItem'
 import { userService } from '@/services/user.service'
+import { authRepository } from '@/services/auth.repository'
 import { User } from '@/model/user'
 
+import UserItem from '@/components/UserItem'
 import styles from './styles.module.scss'
 
 export default function UsersPage() {
@@ -18,14 +19,11 @@ export default function UsersPage() {
     }
 
     function logOut() {
+        authRepository.removeLoggedUser()
         router.replace('login')
     }
 
-    function edit(id: number) {
-        router.push(`users/${id}`)
-    }
-
-    React.useEffect(() => {
+    function fetchUsers() {
         userService.getList().then(list => {
             if (list) {
                 setUsers(list)
@@ -35,6 +33,21 @@ export default function UsersPage() {
         }).catch((error: Error) => {
             console.error('Error: ', error)
         })
+    }
+
+    function edit(id: number) {
+        router.push(`users/${id}`)
+    }
+
+    function remove(id: number) {
+        userService.delete(id).then(isSaved => {
+            if (isSaved === null) logOut()
+            if (isSaved) fetchUsers()
+        })
+    }
+
+    React.useEffect(() => {
+        fetchUsers()
     }, [])
 
     return (
@@ -49,7 +62,7 @@ export default function UsersPage() {
             <main>
                 {
                     users.map(user => (
-                        <UserItem key={user.id} user={user} edit={edit} />
+                        <UserItem key={user.id} user={user} edit={edit} remove={remove} />
                     ))
                 }
             </main>

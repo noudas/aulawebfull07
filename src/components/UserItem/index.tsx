@@ -4,10 +4,11 @@ import styles from './styles.module.scss'
 
 type Props = {
     user: User,
-    edit: (id: number) => void
+    edit: (id: number) => void,
+    remove: (id: number) => void,
 }
 
-export default function UserItem({ user, edit }: Props) {
+export default function UserItem({ user, edit, remove }: Props) {
     return (
         <div className={styles.item}>
             <div className={styles.title}>{ user.name }</div>
@@ -18,6 +19,13 @@ export default function UserItem({ user, edit }: Props) {
                     onClick={() => edit(user.id!)}
                 >
                     EDITAR
+                </button>
+
+                <button
+                    className={styles.removeButton}
+                    onClick={() => remove(user.id!)}
+                >
+                    REMOVER
                 </button>
             </div>
         </div>

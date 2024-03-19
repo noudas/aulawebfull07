@@ -14,7 +14,7 @@ class AuthRepository {
         localStorage.setItem(this.storeKey, JSON.stringify(user))
     }
 
-    public removeLoggedUser(user: User) {
+    public removeLoggedUser() {
         localStorage.removeItem(this.storeKey)
     }
 
