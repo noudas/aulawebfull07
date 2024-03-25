@@ -1,22 +1,27 @@
+import axios, { AxiosResponse } from 'axios'
+
 import { authRepository } from './auth.repository'
 import { User } from '../model/user'
 
 class UserService {
 
-    private readonly urlBase = 'http://localhost:3030/users'
+    private readonly api = axios.create({ baseURL: 'http://localhost:3030/users' })
 
     private getHeaders() {
         const logged = authRepository.getLoggedUser()
         const token = logged ? logged.token : ''
         return {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
     }
 
-    private async getData(response: Response) {
-        if (response.ok) {
-            return await response.json()
+    private isOk(response: AxiosResponse) {
+        return response.status >= 200 && response.status < 300
+    }
+
+    private getData(response: AxiosResponse) {
+        if (this.isOk(response)) {
+            return response.data
         } else {
             if (response.status === 401 || response.status === 403) return null
             
@@ -29,12 +34,11 @@ class UserService {
     }
 
     public async getList() {
-        const response = await fetch(this.urlBase, {
-            method: 'GET',
+        const response = await this.api.get('', {
             headers: this.getHeaders()
         })
 
-        const data = await this.getData(response)
+        const data = this.getData(response)
         if (data) {
             return data as User[]
         } else {
@@ -43,12 +47,11 @@ class UserService {
     }
 
     public async get(id: number) {
-        const response = await fetch(`${this.urlBase}/${id}`, {
-            method: 'GET',
+        const response = await this.api.get(`${id}`, {
             headers: this.getHeaders()
         })
 
-        const data = await this.getData(response)
+        const data = this.getData(response)
         if (data) {
             return data as User
         } else {
@@ -57,13 +60,11 @@ class UserService {
     }
 
     public async create(user: User) {
-        const response = await fetch(this.urlBase, {
-            method: 'POST',
-            headers: this.getHeaders(),
-            body: JSON.stringify(user)
+        const response = await this.api.post('', user, {
+            headers: this.getHeaders()
         })
 
-        const data = await this.getData(response)
+        const data = this.getData(response)
         if (data) {
             const saved: User = data
             return (saved && saved.id) ? true : false
@@ -73,13 +74,11 @@ class UserService {
     }
 
     public async update(id: number, name: string) {
-        const response = await fetch(`${this.urlBase}/${id}`, {
-            method: 'PUT',
-            headers: this.getHeaders(),
-            body: JSON.stringify({ name })
+        const response = await this.api.put(`${id}`, { name }, {
+            headers: this.getHeaders()
         })
 
-        const data = await this.getData(response)
+        const data = this.getData(response)
         if (data) {
             return !!data
         } else {
@@ -88,13 +87,12 @@ class UserService {
     }
 
     public async delete(id: number) {
-        const response = await fetch(`${this.urlBase}/${id}`, {
-            method: 'DELETE',
-            headers: this.getHeaders(),
+        const response = await this.api.delete(`${id}`, {
+            headers: this.getHeaders()
         })
 
-        if (response.ok) {
-            return Boolean(await response.text())
+        if (this.isOk(response)) {
+            return true
         } else {
             if (response.status === 401 || response.status === 403) return null
             
