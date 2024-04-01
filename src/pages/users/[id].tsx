@@ -24,7 +24,7 @@ export default function UserPage() {
                 else goBack()
             })
         }
-    }, [params.id])
+    }, [])
 
     function goBack() {
         router.back()
