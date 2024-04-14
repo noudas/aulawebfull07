@@ -23,6 +23,10 @@ export default function UsersPage() {
         router.replace('login')
     }
 
+  function CriarRoles(){
+    router.replace('roles')
+  }
+
     function fetchUsers() {
         userService.getList().then(list => {
             if (list) {
@@ -56,6 +60,7 @@ export default function UsersPage() {
                 <h2>Usuários</h2>
                 <div className={styles.actions}>
                     <button onClick={createNewUser}>Add</button>
+                  <button onClick={CriarRoles}>Criar uma Role</button>
                     <button onClick={logOut}>Sair</button>
                 </div>
             </header>

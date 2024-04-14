@@ -5,7 +5,7 @@ import { User } from '../model/user'
 
 class UserService {
 
-    private readonly api = axios.create({ baseURL: 'http://localhost:3030/users' })
+    private readonly api = axios.create({ baseURL: 'https://localhost:3000/users' })
 
     private getHeaders() {
         const logged = authRepository.getLoggedUser()

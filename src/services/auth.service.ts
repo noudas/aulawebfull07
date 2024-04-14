@@ -5,7 +5,7 @@ import { authRepository } from './auth.repository'
 
 class AuthService {
 
-    private readonly api = axios.create({ baseURL: 'http://localhost:3030/auth' })
+    private readonly api = axios.create({ baseURL:'https://localhost :3000/auth'})
 
     public async login(username: string, password: string) {
         try {
